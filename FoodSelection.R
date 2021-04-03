@@ -2,7 +2,7 @@
 
 ####### Enter Delivery Phone Numbers Here ########
 
-dels <- c()
+dels <- c('857-999-6768', '774-381-4632')
 
 ##################################################
 
@@ -11,7 +11,7 @@ library(Hmisc)
 library(googlesheets4)
 
 qnames <- read_csv('data_clean/pickup_match.csv')
-guest.data.raw <- read_csv('data_clean/visit_history_2021-03-25.csv')
+guest.data.raw <- read_csv('data_clean/visit_history_current.csv')
 guest.data.clean <- guest.data.raw %>%
   select(id = "Guest ID", first = "First Name", middle = "Middle Name", last = "Last Name", hhsize = "Total Individuals", visit = "Visit on") %>%
   separate(visit, into=c("visit.date", "visit.time"), sep = " ") %>%
@@ -36,7 +36,7 @@ guest.final <- guest.data.clean %>%
   group_by(id, yearmon, hhsize, name.sb) %>%
   summarise(visits = n()) %>%
   ungroup() %>%
-  mutate(visit_no = ifelse(yearmon=='2021-03', visits, 0)) %>%
+  mutate(visit_no = ifelse(yearmon=='2021-04', visits, 0)) %>%
   group_by(id, hhsize, name.sb) %>%
   summarise(visits = sum(visit_no))
 
@@ -90,7 +90,7 @@ name.of$name.sb <- "" # Creating an empty column
 for(i in 1:dim(name.of)[1]) {
   x <- agrep(name.of$orders.fin.name[i], name.sb$guest.final.name.sb,
              ignore.case=TRUE, value=TRUE,
-             max.distance = 0.05, useBytes = TRUE)
+             max.distance = 0.08, useBytes = TRUE)
   x <- paste0(x,"")
   name.of$name.sb[i] <- x
 } 
@@ -109,8 +109,8 @@ rm(name.of, day.trans, orders)
 
 # Create google sheet for Save as Doc processing
 
-out_frs <- orders_fin %>%
-  select(Name = name, Size = fam_size, Pickup = pickup_eng, Restrictions = allergies,
+out_frs <- orders.fin %>%
+  select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies,
          FreshVeg = veg_frs, FreshFruit = fruit_frs, 
          Milk = milk, Eggs = eggs, Cheese = cheese, Yogurt = yogurt,
          FrozenProduce = produce_frz, FrozenProtein = protein_frz) %>%
@@ -120,8 +120,8 @@ out_frs <- orders_fin %>%
   relocate(item)
 
 
-out_dry <- orders_fin %>%
-  select(Name = name, Size = fam_size, Pickup = pickup_eng, Restrictions = allergies,
+out_dry <- orders.fin %>%
+  select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies,
          Cereal = cereal, CanMeat = protein_cnd, CanFruit = fruit_cnd, CanVeg = veg_cnd,
          Juice = juice, Soup = soup, Tomato = tom, DryFruit = dry_fruit,
          Pasta = pasta, Rice = rice, EasyPrep = mac,
