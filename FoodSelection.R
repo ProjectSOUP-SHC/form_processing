@@ -2,7 +2,7 @@
 
 ####### Enter Delivery Phone Numbers Here ########
 
-dels <- c('857-999-6768', '774-381-4632')
+dels <- c('857-417-2508', '617-230-3470')
 
 ##################################################
 
@@ -58,9 +58,10 @@ for (l in langs){
     mutate(time = as.Date(substring(as.character(time), first = 1, last = 10)),
            allergies = as.character(allergies)
            ) %>%
-    filter(time>Sys.Date()-7|del=="Yes"|del=="Si"|del=="Wi"|del=="Sí") %>%
+    filter(time>Sys.Date()-6|del=="Yes"|del=="Si"|del=="Wi"|del=="Sí") %>%
     merge(day.trans, by.x = "pickup", by.y = "pickup", all.x = T) %>%
-    filter(str_detect(pickup_eng, pattern = paste(weekdays(Sys.Date()+1)))|phone %in% dels)
+    filter(str_detect(pickup_eng, pattern = paste(weekdays(Sys.Date())))|phone %in% dels) %>%
+    mutate(milk = unlist(milk))
   
   if (nrow(resp.fin)==0) next
   
@@ -132,7 +133,7 @@ out_dry <- orders.fin %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
-gs4_create(paste("Orders_", Sys.Date(), sep = ''), sheets = list(dry = out_dry, fresh = out_frs))
+gs4_create(paste("Orders_", Sys.Date(), "_v2", sep = ''), sheets = list(dry = out_dry, fresh = out_frs))
 
 
 
