@@ -2,7 +2,7 @@
 
 ####### Enter Delivery Phone Numbers Here ########
 
-dels <- c('857-417-2508', '617-230-3470')
+dels <- c('781-333-0754')
 
 ##################################################
 
@@ -122,18 +122,18 @@ out_frs <- orders.fin %>%
 
 
 out_dry <- orders.fin %>%
-  select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies,
+  select(Name = name, Size = hhsize, Visit = visit_no, Phone = phone, Pickup = pickup_eng, Restrictions = allergies,
          Cereal = cereal, CanMeat = protein_cnd, CanFruit = fruit_cnd, CanVeg = veg_cnd,
          Juice = juice, Soup = soup, Tomato = tom, DryFruit = dry_fruit,
          Pasta = pasta, Rice = rice, EasyPrep = mac,
          PeanutButter = pb, Beans = beans, Milk = milk, Condiment = con,
-         Oil = oil, Coffee = coffee) %>%
+         Oil = oil, Coffee = coffee, Toiletry = toil) %>%
   t() %>%
   as.data.frame() %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
-gs4_create(paste("Orders_", Sys.Date(), "_v2", sep = ''), sheets = list(dry = out_dry, fresh = out_frs))
+gs4_create(paste("Orders_", Sys.Date(), sep = ''), sheets = list(dry = out_dry, fresh = out_frs))
 
 
 
