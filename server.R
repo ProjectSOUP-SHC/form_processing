@@ -2,8 +2,6 @@
 ################# Shiny App ##################
 ##############################################
 
-remotes::install_github("paulc91/shinyauthr")
-
 library(dplyr)
 library(shiny)
 library(shinyjs)        # improve user experience with JavaScript
@@ -23,22 +21,6 @@ user_base <- data.frame(
   name = c("User One", "User Two"),
   stringsAsFactors = FALSE,
   row.names = NULL
-)
-
-ui <- fluidPage(
-  # must turn shinyjs on
-  shinyjs::useShinyjs(),
-  # add logout button UI 
-  div(class = "pull-right", logoutUI(id = "logout")),
-  # add login panel UI function
-  loginUI(id = "login"),
-  
-  textInput("dels", "Phone number for delivery"),
-  actionButton("generate", "Generate spreadsheet"),
-  mainPanel(fluidRow(
-    htmlOutput("frame")
-  )
-  )
 )
 
 server <- function(input, output, session) {
@@ -86,4 +68,4 @@ server <- function(input, output, session) {
 }
 
 
-shinyApp(ui = ui, server = server)
+# shinyApp(ui = ui, server = server)
