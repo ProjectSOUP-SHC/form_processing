@@ -1,0 +1,8 @@
+- extract   guest.data.raw <- read_csv('data_clean/visit_history_current.csv') from client system soxbox
+- allow multiple phone numbers
+- allow date entry (default is today) --       filter(str_detect(pickup_eng, pattern = paste(weekdays(Sys.Date())))|phone %in% dels) %>%
+- printing from embedded sheet
+- column width adjusted
+- unicode characters
+- deploy to cloud instance
+- day_trans, pickup match can go into the code repo
