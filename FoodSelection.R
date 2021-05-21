@@ -2,7 +2,7 @@
 
 ####### Enter Delivery Phone Numbers Here ########
 
-dels <- c('617-230-0464', '617-599-2915')
+dels <- c()
 
 ##################################################
 
@@ -107,7 +107,7 @@ orders.fin <- orders.fin %>%
   merge(name.of, by.x = "name", by.y = "orders.fin.name", all.x = T) %>%
   merge(guest.final, by = "name.sb", all.x = T) %>%  
   mutate(pickup_eng = ifelse(is.na(pickup_eng), "Delivery", pickup_eng),
-         visit_no = ifelse(visits==0|name=="Victoria Mahin", "First",
+         visit_no_sb = ifelse(visits==0|name=="Victoria Mahin", "First",
                            ifelse(visits==1, "Second", "ThirdPlus")))
 
 rm(name.of, day.trans, orders)
@@ -116,8 +116,8 @@ rm(name.of, day.trans, orders)
 # Create google sheet for Save as Doc processing
 
 
-out_frs1 <- orders.fin %>%
-  filter(visit_no=="First"|is.na(visit_no)) %>%
+out_frs1_1 <- orders.fin %>%
+  filter(visit_no_sb=="First"&(visit_no=="Yes"|visit_no=="Don't know"|is.na(visit_no))) %>%
   select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies1,
          FreshVeg = veg_frs1, FreshFruit = fruit_frs1, 
          Milk = milk1, Eggs = eggs1, Cheese = cheese1, Yogurt = yogurt1,
@@ -127,8 +127,8 @@ out_frs1 <- orders.fin %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
-out_frs2 <- orders.fin %>%
-  filter(visit_no=="Second") %>%
+out_frs2_2 <- orders.fin %>%
+  filter(visit_no_sb=="Second"&(visit_no=="No")) %>%
   select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies2,
          FreshVeg = veg_frs2, FreshFruit = fruit_frs2, 
          FrozenProduce = produce_frz2, FrozenProtein = protein_frz2) %>%
@@ -137,10 +137,20 @@ out_frs2 <- orders.fin %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
+out_frs2_1 <- orders.fin %>%
+  filter(visit_no_sb=="Second"&(visit_no=="Don't know"|visit_no=="Yes")) %>%
+  select(Name = name, Size = hhsize, Visit = visit_no, Pickup = pickup_eng, Restrictions = allergies1,
+         FreshVeg = veg_frs1, FreshFruit = fruit_frs1, 
+         FrozenProduce = produce_frz1, FrozenProtein = protein_frz1) %>%
+  t() %>%
+  as.data.frame() %>%
+  bind_cols(item = row.names(.)) %>%
+  relocate(item)
 
+out_frs2 <- bind_cols(out_frs2_2, select(out_frs2_1, -item))
 
-out_dry1 <- orders.fin %>%
-  filter(visit_no=="First"|is.na(visit_no)) %>%
+out_dry1_1 <- orders.fin %>%
+  filter(visit_no_sb=="First"&(visit_no=="Yes"|visit_no=="Don't know"|is.na(visit_no))) %>%
   select(Name = name, Size = hhsize, Visit = visit_no, Phone = phone, Pickup = pickup_eng, Restrictions = allergies1,
          Cereal = cereal1, CanMeat = protein_cnd1, CanFruit = fruit_cnd1, CanVeg = veg_cnd1,
          Juice = juice1, Soup = soup1, Tomato = tom1, DryFruit = dry_fruit1,
@@ -152,8 +162,8 @@ out_dry1 <- orders.fin %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
-out_dry2 <- orders.fin %>%
-  filter(visit_no=="Second") %>%
+out_dry2_2 <- orders.fin %>%
+  filter(visit_no_sb=="Second"&(visit_no=="No")) %>%
   select(Name = name, Size = hhsize, Visit = visit_no, Phone = phone, Pickup = pickup_eng, Restrictions = allergies2,
          Cereal = cereal2, CanMeat = protein_cnd2, CanFruit = fruit_cnd2, CanVeg = veg_cnd2,
          Juice = juice2, Soup = soup2, Tomato = tom2, DryFruit = dry_fruit2,
@@ -164,7 +174,21 @@ out_dry2 <- orders.fin %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
 
-gs4_create(paste("Orders_", Sys.Date()+1, "_Del", sep = ''), sheets = list(dry1 = out_dry1, fresh1 = out_frs1, dry2 = out_dry2, fresh2 = out_frs2))
+out_dry2_1 <- orders.fin %>%
+  filter(visit_no_sb=="Second"&(visit_no=="Don't know"|visit_no=="Yes")) %>%
+  select(Name = name, Size = hhsize, Visit = visit_no, Phone = phone, Pickup = pickup_eng, Restrictions = allergies1,
+         Cereal = cereal1, CanMeat = protein_cnd1, CanFruit = fruit_cnd1, CanVeg = veg_cnd1,
+         Juice = juice1, Soup = soup1, Tomato = tom1, DryFruit = dry_fruit1,
+         Pasta = pasta1, Rice = rice1, EasyPrep = mac1,
+         PeanutButter = pb1, Beans = breans1, Milk = milk1) %>%
+  t() %>%
+  as.data.frame() %>%
+  bind_cols(item = row.names(.)) %>%
+  relocate(item)
+
+out_dry2 <- bind_cols(out_dry2_2, select(out_dry2_1, -item))
+
+gs4_create(paste("Orders_", Sys.Date(), sep = ''), sheets = list(dry1 = out_dry1_1, fresh1 = out_frs1_1, dry2 = out_dry2, fresh2 = out_frs2))
 
 
 
