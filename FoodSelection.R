@@ -2,6 +2,12 @@
 
 ##################################################
 
+# remove.packages(tibble)
+# remove.packages(tidyverse)
+# remove.packages(dplyr)
+# remove.packages(magrittr)
+# devtools::install_version("tidyverse", version = "1.3.0")
+# library(tibble)
 library(tidyverse)
 library(Hmisc)
 library(googlesheets4)

@@ -2,7 +2,7 @@
 ################# Shiny App Server ###########
 ##############################################
 
-library(dplyr)
+#library(dplyr)
 library(shiny)
 library(shinyjs)        # improve user experience with JavaScript
 library(shinyauthr)
@@ -51,12 +51,12 @@ server <- function(input, output, session) {
   })
   
   x1 <-eventReactive(input$generate, {
-    # iframe_url <- callModule(
-    #   module   = generate_delivery_roster,
-    #   id       = "FoodSelection",
-    #   dels     = input$dels
-    # )
-    iframe_url <- "https://docs.google.com/spreadsheets/d/1Q6E54v3SScR8c8_26ppbcc7sTijFFL7k4QjJotaJhCM/edit#gid=1704659122"
+    iframe_url <- callModule(
+      module   = generate_delivery_roster,
+      id       = "FoodSelection",
+      dels     = input$dels
+    )
+    # iframe_url <- "https://docs.google.com/spreadsheets/d/1Q6E54v3SScR8c8_26ppbcc7sTijFFL7k4QjJotaJhCM/edit#gid=1704659122"
     
   })
   

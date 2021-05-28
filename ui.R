@@ -2,7 +2,7 @@
 ################# Shiny App UI ###############
 ##############################################
 
-library(dplyr)
+#library(dplyr)
 library(shiny)
 library(shinyjs)        # improve user experience with JavaScript
 library(shinyauthr)
