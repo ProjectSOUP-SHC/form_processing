@@ -58,6 +58,7 @@ generate_delivery_roster <- function(input, output, session, dels) {
   # langs <- c('Resp_Eng')
   langs <- c('Resp_Eng', 'Resp_KA', 'Resp_Port', 'Resp_Esp')
   
+  googlesheets4::gs4_deauth():
   for (l in langs){
   
     resp <- read_sheet('https://docs.google.com/spreadsheets/d/1m9bbVTLoEgN2Ne8Ns1jgW-f-R7NOw_RANsRDxqX9HQ8/edit#gid=553182362',
