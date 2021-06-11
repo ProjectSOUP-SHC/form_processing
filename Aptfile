@@ -1,3 +1,7 @@
 libsodium-dev
 libxml2-dev
 libssl-dev
+r-cran-tidyverse
+r-cran-hmisc
+r-cran-remotes
+r-cran-devtools
