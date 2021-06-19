@@ -17,7 +17,8 @@ library(dplyr)
 
 generate_delivery_roster <- function(input, output, session, dels) {
   
-  options(gargle_oob_default = TRUE)
+  # options(gargle_oob_default = TRUE)
+  gs4_auth(email = "chrbayer84@googlemail.com")
   qnames <- read_csv('data_clean/pickup_match.csv')
   # guest.data.raw <- read_csv('data_clean/visit_history_current.csv')
   guest.data.raw <- read_sheet('https://docs.google.com/spreadsheets/d/1c_cYcUC1R-zhRLXLisqNiUeufuZllb-et5vRmThFAO4/edit#gid=2078288159'
