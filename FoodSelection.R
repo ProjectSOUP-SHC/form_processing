@@ -14,17 +14,17 @@ library(googlesheets4)
 library(magrittr)
 library(dplyr)
 
-options(error = function() {
-  sink(stderr())
-  on.exit(sink(NULL))
-  traceback(5, max.lines = 1L)
-  if (!interactive()) {
-    q(status = 1)
-  }
-})
-
 generate_delivery_roster <- function(input, output, session, dels) {
-  # options(gargle_oob_default = TRUE)
+  
+  options(error = function() {
+    sink(stderr())
+    on.exit(sink(NULL))
+    traceback(5, max.lines = 1L)
+    if (!interactive()) {
+      q(status = 1)
+    }
+  })
+  
   gs4_deauth()
   gs4_auth(path = "/app/service-account.json")
   
