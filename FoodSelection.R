@@ -19,7 +19,7 @@ generate_delivery_roster <- function(input, output, session, dels) {
   options(error = function() {
     sink(stderr())
     on.exit(sink(NULL))
-    traceback(5, max.lines = 1L)
+    traceback(15, max.lines = 1L)
     if (!interactive()) {
       q(status = 1)
     }
