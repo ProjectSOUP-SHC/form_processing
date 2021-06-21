@@ -16,7 +16,6 @@ library(dplyr)
 
 
 generate_delivery_roster <- function(input, output, session, dels) {
-  
   # options(gargle_oob_default = TRUE)
   gs4_deauth()
   gs4_auth(path = "/app/service-account.json")
@@ -26,7 +25,8 @@ generate_delivery_roster <- function(input, output, session, dels) {
   guest.data.raw <- read_sheet('https://docs.google.com/spreadsheets/d/1c_cYcUC1R-zhRLXLisqNiUeufuZllb-et5vRmThFAO4/edit#gid=2078288159'
                                # ,                     sheet = l)
                               )
-  guest.data.clean <- guest.data.raw %>%
+
+    guest.data.clean <- guest.data.raw %>%
     select(id = "Guest ID", first = "First Name", middle = "Middle Name", last = "Last Name", hhsize = "Total Individuals", visit = "Visit on") %>%
     separate(visit, into=c("visit.date", "visit.time"), sep = " ") %>%
     mutate(visit.date = as.Date(visit.date, "%Y-%m-%d"),
