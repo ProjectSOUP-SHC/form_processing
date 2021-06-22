@@ -15,7 +15,7 @@ library(magrittr)
 library(dplyr)
 
 generate_delivery_roster <- function(input, output, session, dels) {
-  
+  browser()
   options(error = function() {
     sink(stderr())
     on.exit(sink(NULL))
