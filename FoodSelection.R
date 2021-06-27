@@ -15,7 +15,7 @@ library(magrittr)
 library(dplyr)
 
 generate_delivery_roster <- function(input, output, session, dels) {
-  browser()
+  # browser()
   options(error = function() {
     sink(stderr())
     on.exit(sink(NULL))
@@ -26,13 +26,13 @@ generate_delivery_roster <- function(input, output, session, dels) {
   })
   
   gs4_deauth()
-  gs4_auth(path = "/app/service-account.json")
+  # gs4_auth(path = "/app/service-account.json")
+  gs4_auth(path = "/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
   
   qnames <- read_csv('data_clean/pickup_match.csv')
-  # guest.data.raw <- read_csv('data_clean/visit_history_current.csv')
-  guest.data.raw <- read_sheet('https://docs.google.com/spreadsheets/d/1c_cYcUC1R-zhRLXLisqNiUeufuZllb-et5vRmThFAO4/edit#gid=2078288159'
-                               # ,                     sheet = l)
-                              )
+  guest.data.raw <- read_csv('data_clean/visit_history_current.csv')
+  # guest.data.raw <- read_sheet('https://docs.google.com/spreadsheets/d/1c_cYcUC1R-zhRLXLisqNiUeufuZllb-et5vRmThFAO4/edit#gid=2078288159'
+                               # , sheet = "visit_history_current")
 
     guest.data.clean <- guest.data.raw %>%
     select(id = "Guest ID", first = "First Name", middle = "Middle Name", last = "Last Name", hhsize = "Total Individuals", visit = "Visit on") %>%
