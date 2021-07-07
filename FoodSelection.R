@@ -131,20 +131,16 @@ day.trans <- read_csv('data_clean/day_trans.csv', locale = readr::locale(encodin
 
 langs <- c('Resp_Eng2', 'Resp_KA2', 'Resp_Esp2', 'Resp_Port2')
 
-
 for (l in langs){
   
   resp <- read_sheet('https://docs.google.com/spreadsheets/d/1m9bbVTLoEgN2Ne8Ns1jgW-f-R7NOw_RANsRDxqX9HQ8/edit#gid=553182362',
-                     sheet = l)
+                     sheet = l,
+                     col_types = "Tccccccccccccccccccccccccccccccccccccccccccccccccccccc")
   names(resp) <- qnames$q_short_eng
   
   
   resp.fin <- resp %>%
-    mutate(time = as.Date(substring(as.character(time), first = 1, last = 10)),
-           allergies2 = as.character(allergies2),
-           allergies1 = as.character(allergies1),
-           milk1 = ifelse(is.list(milk1), unlist(milk1), milk1),
-           milk2 = ifelse(is.list(milk2), unlist(milk2), milk2)
+    mutate(time = as.Date(substring(as.character(time), first = 1, last = 10))
            ) %>%
     filter(time>Sys.Date()-6|del=="Yes"|del=="Sim"|del=="Wi"|del=="Sí") %>%
     merge(day.trans, by.x = "pickup", by.y = "pickup", all.x = T) %>%
@@ -196,12 +192,17 @@ out_frs1_2 <- orders.fin %>% #First visit who list second
   filter((visit_no_sb=="First")&(visit_no=="No")) %>%
   select(Name = name, Size = hhsize, Visit = visit_no_sb, Pickup = pickup_eng, Restrictions = allergies1,
          FreshVeg = veg_frs2, FreshFruit = fruit_frs2, 
-         Milk = milk2, Eggs = "Ask client", Cheese = "Ask client", Yogurt = "Ask client",
+         Milk = milk2, 
          FrozenProduce = produce_frz2, FrozenProtein = protein_frz2) %>%
+  mutate(Eggs = "Ask client", 
+         Cheese = "Ask client", 
+         Yogurt = "Ask client") %>%
   t() %>%
   as.data.frame() %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
+
+out_frs1 <- bind_cols(out_frs1_1, select(out_frs1_2, -item))
 
 out_frs2_2 <- orders.fin %>% #Second visit who list second
   filter((visit_no_sb=="Second"|is.na(visit_no_sb)|visit_no_sb=="ThirdPlus")&(visit_no=="No")) %>%
@@ -244,12 +245,17 @@ out_dry1_2 <- orders.fin %>%
          Cereal = cereal2, CanMeat = protein_cnd2, CanFruit = fruit_cnd2, CanVeg = veg_cnd2,
          Juice = juice2, Soup = soup2, Tomato = tom2, DryFruit = dry_fruit2,
          Pasta = pasta2, Rice = rice2, EasyPrep = mac2,
-         PeanutButter = pb2, Beans = breans2, Milk = milk2, Condiment = "Äsk client",
-         Oil = "Äsk client", Coffee = "Äsk client", Toiletry = "Äsk client") %>%
+         PeanutButter = pb2, Beans = beans2, Milk = milk2) %>%
+  mutate(Condiment = "Ask client",
+         Oil = "Ask client", 
+         Coffee = "Ask client", 
+         Toiletry = "Ask client") %>%
   t() %>%
   as.data.frame() %>%
   bind_cols(item = row.names(.)) %>%
   relocate(item)
+
+out_dry1 <- bind_cols(out_dry1_1, select(out_dry1_2, -item))
 
 out_dry2_2 <- orders.fin %>%
   filter((visit_no_sb=="Second"|is.na(visit_no_sb)|visit_no_sb=="ThirdPlus")&(visit_no=="No")) %>%
@@ -277,7 +283,7 @@ out_dry2_1 <- orders.fin %>%
 
 out_dry2 <- bind_cols(out_dry2_2, select(out_dry2_1, -item))
 
-gs4_create(paste("Orders_", Sys.Date()+1, sep = ''), sheets = list(dry1 = out_dry1_1, fresh1 = out_frs1_1, dry2 = out_dry2, fresh2 = out_frs2))
+gs4_create(paste("Orders_", Sys.Date(), sep = ''), sheets = list(dry1 = out_dry1, fresh1 = out_frs1, dry2 = out_dry2, fresh2 = out_frs2))
 
 
 
