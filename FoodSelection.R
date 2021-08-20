@@ -299,7 +299,6 @@ generate_delivery_roster <- function(input, output, session, dels) {
   # <chr>             <drv_id>                                     <list>           
   # 1 Orders_2021-07-30 1nkwWBS544-qKdXNn_amrLNrHK4Uw_JtW3AAPvKkz1I0 <named list [35]>
   drive_id = str(generated_sheets$`id`[1])
-  browser()
   return(drive_id)
 }
 # 
