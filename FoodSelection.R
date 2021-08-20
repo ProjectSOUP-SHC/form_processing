@@ -26,14 +26,16 @@ generate_delivery_roster <- function(input, output, session, dels) {
     drive_auth_path <- "/app/service-account.json"
   }
   
+  print(paste("auth path", drive_auth_path))
+  install.packages("readr") # you only need to do this one time on your system
+  library(readr)
+  mystring <- read_file("path/to/myfile.txt")
+  print(paste("auth path", mystring))
+  
   gs4_deauth()
   drive_deauth()
- 
-  # gs4_auth(path = "/app/service-account.json")
   drive_auth(path = drive_auth_path)
-             #"/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
   gs4_auth(path = drive_auth_path)
-  # "/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
   
   
   qnames <- read_csv('data_clean/pickup_match_eng.csv')
