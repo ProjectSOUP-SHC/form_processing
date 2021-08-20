@@ -21,12 +21,16 @@ options(error = function() {
   }
 })
 
+# extract username and password from heroku env
+admin_user <- Sys.getenv("ADMIN_USERNAME")
+admin_password <- Sys.getenv("ADMIN_PASSWORD")
+
 # dataframe that holds usernames, passwords and other user data
 user_base <- data.frame(
-  user = c("user1", "user2"),
-  password = c("pass1", "pass2"), 
-  permissions = c("admin", "standard"),
-  name = c("User One", "User Two"),
+  user = c(admin_user),
+  password = c(admin_password), 
+  permissions = c("admin"),
+  name = c("User One"),
   stringsAsFactors = FALSE,
   row.names = NULL
 )
@@ -59,15 +63,9 @@ server <- function(input, output, session) {
   })
   
   x1 <-eventReactive(input$generate, {
-    iframe_url <- 
-    #   callModule(
-    #   module   = generate_delivery_roster,
-    #   id       = "FoodSelection",
-    #   dels     = input$dels
-    # )
-      generate_delivery_roster(input$dels)
-    # iframe_url <- "https://docs.google.com/spreadsheets/d/1Q6E54v3SScR8c8_26ppbcc7sTijFFL7k4QjJotaJhCM/edit#gid=1704659122"
     
+    iframe_url <- paste("https://docs.google.com/spreadsheets/d/",
+            generate_delivery_roster(input, output, session, input$dels), sep = "")
   })
   
   output$frame <- renderUI({
