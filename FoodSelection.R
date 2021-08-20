@@ -20,21 +20,20 @@ generate_delivery_roster <- function(input, output, session, dels) {
   
   current_yearmon <- "2021-06"
   
-  # options(error = function() {
-  #   sink(stderr())
-  #   on.exit(sink(NULL))
-  #   traceback(15, max.lines = 1L)
-  #   if (!interactive()) {
-  #     q(status = 1)
-  #   }
-  # })
-  #
-  # drive_auth()
+  # load google credentials
+  drive_auth_path <- Sys.getenv("GOOGLE_DRIVE_AUTH_PATH")
+  if (drive_auth_path == ''){
+    drive_auth_path <- "/app/service-account.json"
+  }
+  
   gs4_deauth()
   drive_deauth()
+ 
   # gs4_auth(path = "/app/service-account.json")
-  drive_auth(path = "/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
-  gs4_auth(path = "/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
+  drive_auth(path = drive_auth_path)
+             #"/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
+  gs4_auth(path = drive_auth_path)
+  # "/home/christian/temp/r/form_processing/loadtest-218919-df92f99e07b9.json")
   
   
   qnames <- read_csv('data_clean/pickup_match_eng.csv')
