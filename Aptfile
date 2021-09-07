@@ -5,4 +5,8 @@ r-cran-tidyverse
 r-cran-hmisc
 r-cran-remotes
 r-cran-devtools
+iproute2
+openssh
+bash
+curl
 
